@@ -1,0 +1,47 @@
+@hostname = http://127.0.0.1
+@port = 8800
+@host = {{hostname}}:{{port}}
+@baseUrl = {{host}}
+@contentType = application/json
+
+
+### GET all ourse details 
+GET {{baseUrl}}
+
+
+### get the posts
+GET {{baseUrl}}/post
+
+
+### get the posts
+GET {{baseUrl}}/post/1
+
+
+### get the posts
+GET {{baseUrl}}/post/latest
+
+
+### Creaet the post
+POST {{baseUrl}}/post
+content-type: {{contentType}}
+
+{
+  "name": "Book",
+  "content": "This is the blog detail",
+  "price": 250
+}
+
+
+### Creaet the post
+PUT {{baseUrl}}/post/13
+content-type: {{contentType}}
+
+{
+  "name": "Note Book",
+  "content": "This is the blog detail",
+  "price": 200
+}
+
+
+### Delete the posts
+DELETE {{baseUrl}}/post/12
