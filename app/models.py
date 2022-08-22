@@ -8,8 +8,17 @@ class Product(Base):
     __tablename__ = 'products'
 
     id = Column(Integer, primary_key=True, nullable=False)
-    name = Column(String, nullable=False)
+    name = Column(String(100), nullable=False)
     price = Column(Integer, nullable=False)
     # is_sale = Column(Boolean, server_default='true', nullable=False)
     inventory = Column(Integer, server_default='1')
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+
+
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    email = Column(String(150), nullable=False, unique=True)
+    password = Column(String(100), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
