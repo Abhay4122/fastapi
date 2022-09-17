@@ -13,11 +13,11 @@ Content-Type: multipart/form-data; boundary=boundary
 --boundary
 Content-Disposition: form-data; name="username"
 
-user@gmail.coms
+abhay@gmail.com
 --boundary
 Content-Disposition: form-data; name="password"
 
-abababab
+aaaaaaaa
 --boundary--
 # Content-Disposition: form-data; name="image"; filename="1.png"
 # Content-Type: image/png
@@ -93,8 +93,8 @@ POST {{baseUrl}}/user
 content-type: {{contentType}}
 
 {
-  "email": "user@gmail.comqs",
-  "password": "abababab"
+  "email": "abhay@gmail.com",
+  "password": "aaaaaaaa"
 }
 
 

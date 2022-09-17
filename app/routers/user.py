@@ -1,14 +1,14 @@
 from fastapi import FastAPI, Depends, Response, status, HTTPException, APIRouter
-from .. import models, schemas, utils
+import models, schemas, utils
 from sqlalchemy.orm import Session
-from ..database_config import engine, get_db
-from ..utils import hash
+from database_config import engine, get_db
+from utils import hash
 
 router = APIRouter(prefix='/user', tags=['Users'])
 
 
 # @router.get('/users', response_model=List[schemas.User])
-@router.get('/')
+@router.get('')
 async def get_posts(db: Session = Depends(get_db)):
     data = db.query(models.User).all()
 
@@ -26,7 +26,7 @@ async def get_post(id: int, db: Session = Depends(get_db)):
     return user
 
 
-@router.post('/', status_code=status.HTTP_201_CREATED, response_model=schemas.User)
+@router.post('', status_code=status.HTTP_201_CREATED, response_model=schemas.User)
 async def create_post(new_post: schemas.UserCreate, db: Session = Depends(get_db)):
     # Hash the password
     hash_pwd = hash(new_post.password)

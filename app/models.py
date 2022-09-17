@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.sql.sqltypes import TIMESTAMP
 from sqlalchemy.sql.expression import text
-from .database_config import Base
+from sqlalchemy.orm import relationship
+from database_config import Base
 from datetime import datetime
 
 class Product(Base):
@@ -11,8 +12,11 @@ class Product(Base):
     name = Column(String(100), nullable=False)
     price = Column(Integer, nullable=False)
     # is_sale = Column(Boolean, server_default='true', nullable=False)
-    inventory = Column(Integer, server_default='1')
-    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    inventory = Column(Integer)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    created_at = Column(DateTime, server_default=text('now()'), nullable=False)
+
+    user = relationship('User')
 
 
 class User(Base):
@@ -21,4 +25,4 @@ class User(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     email = Column(String(150), nullable=False, unique=True)
     password = Column(String(100), nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    created_at = Column(DateTime, server_default=text('now()'), nullable=False)
