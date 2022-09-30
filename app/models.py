@@ -26,3 +26,11 @@ class User(Base):
     email = Column(String(150), nullable=False, unique=True)
     password = Column(String(100), nullable=False)
     created_at = Column(DateTime, server_default=text('now()'), nullable=False)
+
+
+class Vote(Base):
+    __tablename__ = 'votes'
+
+    # id = Column(Integer, primary_key=True, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True, nullable=False)
+    product_id = Column(Integer, ForeignKey('products.id', ondelete='CASCADE'), primary_key=True, nullable=False)

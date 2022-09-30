@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy.orm import Session
 import models, schemas
 from database_config import engine, get_db
-from routers import post, user, auth
+from routers import product, user, auth, vote
 
 
 models.Base.metadata.create_all(bind=engine)
@@ -16,6 +16,7 @@ async def root():
     return {'msg': 'Welcome to the fastapi'}
 
 
-app.include_router(post.router)
+app.include_router(product.router)
 app.include_router(user.router)
 app.include_router(auth.router)
+app.include_router(vote.router)

@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, Response, status, HTTPException, APIRouter
-from typing import List
+from typing import List, Optional
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 import models, schemas, oauth2
 from database_config import engine, get_db
 
@@ -8,19 +9,36 @@ from database_config import engine, get_db
 router = APIRouter(prefix='/post', tags=['Posts'])
 
 
-@router.get('', response_model=List[schemas.Product])
-async def get_posts(db: Session = Depends(get_db), get_current_user: str = Depends(oauth2.get_current_user)):
-    data = db.query(models.Product).all()
+@router.get('', response_model=List[schemas.ProdcutOut])
+async def get_posts(
+        db: Session = Depends(get_db),
+        get_current_user: str = Depends(oauth2.get_current_user),
+        limit: int = 10,
+        skip: int = 0,
+        search: Optional[str] = ''
+    ):
+    '''
+        Get the list of product with pagination
+    '''
+    # data = db.query(models.Product).filter(models.Product.name.contains(search)).limit(limit).offset(skip).all()
 
-    print(get_current_user.email)
+    data = db.query(models.Product, func.count(models.Vote.user_id).label('votes')).join(
+        models.Vote,
+        models.Product.id == models.Vote.product_id,
+        isouter=True
+    ).group_by(models.Product.id).filter(models.Product.name.contains(search)).limit(limit).offset(skip).all()
 
     return data
 
 
-@router.get('/{id}', response_model=schemas.Product)
+@router.get('/{id}', response_model=schemas.ProdcutOut)
 async def get_post(id: int, db: Session = Depends(get_db), get_current_user: str = Depends(oauth2.get_current_user)):
     
-    product = db.query(models.Product).filter(models.Product.id == id).first()
+    product = db.query(models.Product, func.count(models.Vote.user_id).label('votes')).join(
+        models.Vote,
+        models.Product.id == models.Vote.product_id,
+        isouter=True
+    ).group_by(models.Product.id).filter(models.Product.id == id).first()
 
     if not product:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'product with ID: {id} was not found')

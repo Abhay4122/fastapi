@@ -36,7 +36,7 @@ GET {{baseUrl}}
 
 
 ### get the posts
-GET {{baseUrl}}/post
+GET {{baseUrl}}/post?limit=2&skip=0&search=buk
 Authorization: Bearer {{authToken}}
 
 
@@ -55,8 +55,8 @@ content-type: {{contentType}}
 
 {
   "name": "Book",
-  "content": "This is the blog detail",
-  "price": 250
+  "price": 250,
+  "user_id": 1
 }
 
 
@@ -110,3 +110,14 @@ content-type: {{contentType}}
 
 ### Delete the user
 DELETE {{baseUrl}}/user/11
+
+
+### Vote the user
+POST {{baseUrl}}/vote
+content-type: {{contentType}}
+Authorization: Bearer {{authToken}}
+
+{
+  "product_id": 5,
+  "dir": 1
+}
